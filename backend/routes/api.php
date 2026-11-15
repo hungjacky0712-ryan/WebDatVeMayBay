@@ -3,7 +3,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
-
+use App\Http\Controllers\Api\SanBayController;
 // Kiểm tra kết nối SQL Server
 Route::get('/test-db', function () {
     $database = DB::connection()->getDatabaseName();
@@ -33,3 +33,4 @@ Route::get('/tables', function () {
 
     return response()->json($tables);
 });
+Route::apiResource('sanbay', SanBayController::class);
