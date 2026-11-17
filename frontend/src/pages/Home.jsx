@@ -1,12 +1,68 @@
-
+﻿
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import "../App.css";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
 
 function Home() {
   // Điều hướng sang trang khác
   const navigate = useNavigate();
+  const [account, setAccount] = useState(() => {
+    const customerToken = sessionStorage.getItem("customer_token");
+    const customerUser = sessionStorage.getItem("customer_user");
+
+    if (customerToken && customerUser) {
+      try {
+        return {
+          type: "customer",
+          token: customerToken,
+          user: JSON.parse(customerUser),
+        };
+      } catch {
+        sessionStorage.removeItem("customer_user");
+      }
+    }
+
+    const adminToken = sessionStorage.getItem("admin_token");
+    const adminUser = sessionStorage.getItem("admin_user");
+
+    if (adminToken) {
+      let user = { HoTen: "Quản trị viên" };
+
+      try {
+        if (adminUser) user = JSON.parse(adminUser);
+      } catch {}
+
+      return { type: "admin", token: adminToken, user };
+    }
+
+    return null;
+  });
+
+  const handleLogout = async () => {
+    try {
+      if (account?.token) {
+        await fetch(`${API_BASE_URL}/api/logout`, {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${account.token}`,
+          },
+        });
+      }
+    } catch (error) {
+      console.error("Lỗi đăng xuất:", error);
+    }
+
+    sessionStorage.removeItem("customer_token");
+    sessionStorage.removeItem("customer_user");
+    sessionStorage.removeItem("admin_token");
+    sessionStorage.removeItem("admin_user");
+
+    setAccount(null);
+    navigate("/");
+  };
 
   // Dữ liệu tìm kiếm chuyến bay
   const [trip, setTrip] = useState("round");
@@ -79,8 +135,45 @@ function Home() {
         </nav>
 
         <div className="nav-actions">
-          <button className="login-btn" onClick={() => navigate("/admin/login")}>Đăng nhập</button>
-          <button className="register-btn">Đăng ký</button>
+          {account ? (
+            <>
+              <span className="account-greeting">
+                Xin chào, {account.user.HoTen}
+              </span>
+
+              {account.type === "admin" && (
+                <button
+                  className="register-btn"
+                  onClick={() => navigate("/admin/sanbay")}
+                >
+                  Quản lý
+                </button>
+              )}
+
+              <button
+                className="login-btn"
+                onClick={handleLogout}
+              >
+                Đăng xuất
+              </button>
+            </>
+          ) : (
+            <>
+              <button
+                className="login-btn"
+                onClick={() => navigate("/login")}
+              >
+                Đăng nhập
+              </button>
+
+              <button
+                className="register-btn"
+                onClick={() => navigate("/register")}
+              >
+                Đăng ký
+              </button>
+            </>
+          )}
         </div>
       </header>
 
@@ -330,3 +423,5 @@ function Home() {
 }
 
 export default Home;
+
+

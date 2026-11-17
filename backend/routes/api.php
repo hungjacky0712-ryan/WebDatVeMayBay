@@ -1,4 +1,5 @@
 
+
 <?php
 
 use Illuminate\Support\Facades\Route;
@@ -10,8 +11,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Middleware\AdminOnly;
 
 // =====================================================
-// 1. DANG NHAP
-// Gioi han 5 lan dang nhap/phut
+// 1. DANG NHAP ADMIN
 // =====================================================
 
 Route::post('/login', [AuthController::class, 'login'])
@@ -19,7 +19,18 @@ Route::post('/login', [AuthController::class, 'login'])
 
 
 // =====================================================
-// 2. API CONG KHAI - SAN BAY
+// 2. DANG KY VA DANG NHAP KHACH HANG
+// =====================================================
+
+Route::post('/register', [AuthController::class, 'register'])
+    ->middleware('throttle:5,1');
+
+Route::post('/customer/login', [AuthController::class, 'customerLogin'])
+    ->middleware('throttle:5,1');
+
+
+// =====================================================
+// 3. API CONG KHAI - SAN BAY
 // =====================================================
 
 Route::get('/sanbay', [SanBayController::class, 'index']);
@@ -27,7 +38,7 @@ Route::get('/sanbay/{sanbay}', [SanBayController::class, 'show']);
 
 
 // =====================================================
-// 3. API CONG KHAI - MAY BAY
+// 4. API CONG KHAI - MAY BAY
 // =====================================================
 
 Route::get('/maybay', [MayBayController::class, 'index']);
@@ -35,7 +46,7 @@ Route::get('/maybay/{id}', [MayBayController::class, 'show']);
 
 
 // =====================================================
-// 4. API CONG KHAI - HANG HANG KHONG
+// 5. API CONG KHAI - HANG HANG KHONG
 // =====================================================
 
 Route::get('/hanghangkhong', function () {
@@ -49,24 +60,22 @@ Route::get('/hanghangkhong', function () {
 
 
 // =====================================================
-// 5. CAC API YEU CAU DANG NHAP SANCTUM
+// 6. CAC API YEU CAU DANG NHAP SANCTUM
 // =====================================================
 
 Route::middleware('auth:sanctum')->group(function () {
 
-    // Dang xuat
+    // DANG XUAT
     Route::post('/logout', [AuthController::class, 'logout']);
 
 
     // =================================================
-    // 6. CAC API CHI DANH CHO QUAN TRI VIEN
+    // 7. CAC API CHI DANH CHO QUAN TRI VIEN
     // =================================================
 
     Route::middleware(AdminOnly::class)->group(function () {
 
-        // ---------------------------------------------
         // CRUD SAN BAY
-        // ---------------------------------------------
 
         Route::post('/sanbay', [SanBayController::class, 'store']);
 
@@ -76,9 +85,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/sanbay/{sanbay}', [SanBayController::class, 'destroy']);
 
 
-        // ---------------------------------------------
         // CRUD MAY BAY
-        // ---------------------------------------------
 
         Route::post('/maybay', [MayBayController::class, 'store']);
 
@@ -88,9 +95,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/maybay/{id}', [MayBayController::class, 'destroy']);
 
 
-        // ---------------------------------------------
         // KIEM TRA DATABASE
-        // ---------------------------------------------
 
         Route::get('/test-db', function () {
 
@@ -110,7 +115,8 @@ Route::middleware('auth:sanctum')->group(function () {
         });
 
 
-        // Danh sach bang trong database
+        // DANH SACH BANG DATABASE
+
         Route::get('/tables', function () {
 
             $tables = DB::select("
@@ -126,3 +132,4 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
 });
+

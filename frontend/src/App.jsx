@@ -1,8 +1,10 @@
-
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import Home from "./pages/Home";
 import FlightResults from "./pages/FlightResults";
+
+import CustomerLogin from "./pages/CustomerLogin";
+import CustomerRegister from "./pages/CustomerRegister";
 
 import AirportManagement from "./pages/admin/AirportManagement";
 import AircraftManagement from "./pages/admin/AircraftManagement";
@@ -24,9 +26,13 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+        {/* Trang khách hàng */}
         <Route path="/" element={<Home />} />
         <Route path="/flights" element={<FlightResults />} />
+        <Route path="/login" element={<CustomerLogin />} />
+        <Route path="/register" element={<CustomerRegister />} />
 
+        {/* Trang quản trị */}
         <Route path="/admin/login" element={<AdminLogin />} />
 
         <Route
@@ -46,6 +52,9 @@ function App() {
             </ProtectedAdminRoute>
           }
         />
+
+        {/* Đường dẫn không tồn tại */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
   );

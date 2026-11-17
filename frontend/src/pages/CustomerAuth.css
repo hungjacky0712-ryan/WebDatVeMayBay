@@ -1,0 +1,126 @@
+﻿.customer-auth-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 35px 16px;
+  background: linear-gradient(135deg, #eaf3ff, #f7faff);
+  font-family: inherit;
+}
+
+.customer-auth-card {
+  width: 100%;
+  max-width: 460px;
+  padding: 36px;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 12px 40px rgba(20, 55, 100, 0.1);
+}
+
+.customer-auth-logo {
+  display: block;
+  margin-bottom: 24px;
+  color: #123b70;
+  font-size: 23px;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.customer-auth-logo span {
+  color: #2586e8;
+}
+
+.customer-auth-card h1 {
+  margin: 0 0 8px;
+  color: #17365d;
+  font-size: 27px;
+}
+
+.customer-auth-card > p {
+  margin: 0 0 25px;
+  color: #718096;
+  line-height: 1.5;
+}
+
+.customer-auth-card label {
+  display: block;
+  margin: 15px 0 7px;
+  color: #34445a;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.customer-auth-card input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  border: 1px solid #d8e1ed;
+  border-radius: 9px;
+  outline: none;
+  font-size: 14px;
+  transition: border-color 0.2s;
+}
+
+.customer-auth-card input:focus {
+  border-color: #2586e8;
+}
+
+.customer-auth-card button {
+  width: 100%;
+  margin-top: 24px;
+  padding: 13px;
+  border: none;
+  border-radius: 9px;
+  background: #176bc0;
+  color: white;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.customer-auth-card button:hover {
+  background: #10569d;
+}
+
+.customer-auth-card button:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.customer-auth-footer {
+  margin-top: 22px;
+  text-align: center;
+  color: #718096;
+  font-size: 14px;
+}
+
+.customer-auth-footer a {
+  color: #176bc0;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.auth-error,
+.auth-success {
+  margin-bottom: 15px;
+  padding: 11px 13px;
+  border-radius: 8px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.auth-error {
+  background: #fff0f0;
+  color: #c62828;
+}
+
+.auth-success {
+  background: #eaf8ef;
+  color: #218348;
+}
+
+@media (max-width: 480px) {
+  .customer-auth-card {
+    padding: 25px 20px;
+  }
+}
