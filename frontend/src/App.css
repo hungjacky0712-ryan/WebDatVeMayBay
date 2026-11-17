@@ -485,6 +485,21 @@ footer p {
   font-size: 12px;
   margin-top: 20px;
 }
+.admin-login-btn {
+  padding: 10px 16px;
+  border: 1px solid #1b6b3a;
+  border-radius: 8px;
+  background: transparent;
+  color: #1b6b3a;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.admin-login-btn:hover {
+  background: #1b6b3a;
+  color: #fff;
+}
 
 @media (max-width: 750px) {
   .flight-card {
