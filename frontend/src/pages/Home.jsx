@@ -1,13 +1,16 @@
-﻿
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import "../App.css";
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
+
+const API_BASE_URL = (
+  import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000"
+).replace(/\/+$/, "");
 
 function Home() {
-  // Điều hướng sang trang khác
   const navigate = useNavigate();
+
   const [account, setAccount] = useState(() => {
     const customerToken = sessionStorage.getItem("customer_token");
     const customerUser = sessionStorage.getItem("customer_user");
@@ -20,6 +23,7 @@ function Home() {
           user: JSON.parse(customerUser),
         };
       } catch {
+        sessionStorage.removeItem("customer_token");
         sessionStorage.removeItem("customer_user");
       }
     }
@@ -34,11 +38,22 @@ function Home() {
         if (adminUser) user = JSON.parse(adminUser);
       } catch {}
 
-      return { type: "admin", token: adminToken, user };
+      return {
+        type: "admin",
+        token: adminToken,
+        user,
+      };
     }
 
     return null;
   });
+
+  const [trip, setTrip] = useState("round");
+  const [from, setFrom] = useState("TP. Hồ Chí Minh (SGN)");
+  const [to, setTo] = useState("Hà Nội (HAN)");
+  const [departure, setDeparture] = useState("");
+  const [returnDate, setReturnDate] = useState("");
+  const [passengers, setPassengers] = useState(1);
 
   const handleLogout = async () => {
     try {
@@ -64,34 +79,19 @@ function Home() {
     navigate("/");
   };
 
-  // Dữ liệu tìm kiếm chuyến bay
-  const [trip, setTrip] = useState("round");
-
-  const [from, setFrom] = useState("TP. Hồ Chí Minh (SGN)");
-  const [to, setTo] = useState("Hà Nội (HAN)");
-
-  const [departure, setDeparture] = useState("");
-  const [returnDate, setReturnDate] = useState("");
-
-  const [passengers, setPassengers] = useState(1);
-
-  // Xử lý khi nhấn nút tìm chuyến bay
   const handleSearch = (e) => {
     e.preventDefault();
 
-    // Kiểm tra điểm đi và điểm đến
     if (from === to) {
       alert("Điểm đi và điểm đến không được trùng nhau!");
       return;
     }
 
-    // Kiểm tra ngày đi
     if (!departure) {
       alert("Vui lòng chọn ngày đi!");
       return;
     }
 
-    // Kiểm tra ngày về
     if (trip === "round" && !returnDate) {
       alert("Vui lòng chọn ngày về!");
       return;
@@ -102,7 +102,6 @@ function Home() {
       return;
     }
 
-    // Chuyển dữ liệu tìm kiếm sang trang kết quả
     navigate("/flights", {
       state: {
         from,
@@ -117,7 +116,6 @@ function Home() {
 
   return (
     <div className="app">
-
       {/* THANH ĐIỀU HƯỚNG */}
       <header className="navbar">
         <a className="logo" href="/">
@@ -138,22 +136,26 @@ function Home() {
           {account ? (
             <>
               <span className="account-greeting">
-                Xin chào, {account.user.HoTen}
+                Xin chào, {account.user?.HoTen || "Người dùng"}
               </span>
 
-              {account.type === "admin" && (
+              {account.type === "admin" ? (
                 <button
                   className="register-btn"
                   onClick={() => navigate("/admin/sanbay")}
                 >
                   Quản lý
                 </button>
+              ) : (
+                <button
+                  className="admin-login-btn"
+                  onClick={() => navigate("/admin/login")}
+                >
+                  Quản trị viên
+                </button>
               )}
 
-              <button
-                className="login-btn"
-                onClick={handleLogout}
-              >
+              <button className="login-btn" onClick={handleLogout}>
                 Đăng xuất
               </button>
             </>
@@ -172,13 +174,19 @@ function Home() {
               >
                 Đăng ký
               </button>
+
+              <button
+                className="admin-login-btn"
+                onClick={() => navigate("/admin/login")}
+              >
+                Quản trị viên
+              </button>
             </>
           )}
         </div>
       </header>
 
       <main>
-
         {/* BANNER */}
         <section className="hero" id="home">
           <div className="hero-content">
@@ -207,7 +215,6 @@ function Home() {
 
         {/* FORM TÌM KIẾM */}
         <section className="booking-section" id="search">
-
           <div className="section-heading">
             <div>
               <span className="eyebrow">ĐẶT VÉ TRỰC TUYẾN</span>
@@ -218,10 +225,7 @@ function Home() {
           </div>
 
           <form className="booking-form" onSubmit={handleSearch}>
-
-            {/* LOẠI CHUYẾN BAY */}
             <div className="trip-options">
-
               <label>
                 <input
                   type="radio"
@@ -241,16 +245,11 @@ function Home() {
                 />
                 Một chiều
               </label>
-
             </div>
 
-            {/* THÔNG TIN HÀNH TRÌNH */}
             <div className="form-grid">
-
-              {/* ĐIỂM ĐI */}
               <div className="field">
                 <label>ĐIỂM KHỞI HÀNH</label>
-
                 <select
                   value={from}
                   onChange={(e) => setFrom(e.target.value)}
@@ -263,10 +262,8 @@ function Home() {
                 </select>
               </div>
 
-              {/* ĐIỂM ĐẾN */}
               <div className="field">
                 <label>ĐIỂM ĐẾN</label>
-
                 <select
                   value={to}
                   onChange={(e) => setTo(e.target.value)}
@@ -279,10 +276,8 @@ function Home() {
                 </select>
               </div>
 
-              {/* NGÀY ĐI */}
               <div className="field">
                 <label>NGÀY ĐI</label>
-
                 <input
                   type="date"
                   value={departure}
@@ -298,11 +293,9 @@ function Home() {
                 />
               </div>
 
-              {/* NGÀY VỀ */}
               {trip === "round" && (
                 <div className="field">
                   <label>NGÀY VỀ</label>
-
                   <input
                     type="date"
                     value={returnDate}
@@ -313,10 +306,8 @@ function Home() {
                 </div>
               )}
 
-              {/* SỐ HÀNH KHÁCH */}
               <div className="field">
                 <label>HÀNH KHÁCH</label>
-
                 <select
                   value={passengers}
                   onChange={(e) => setPassengers(Number(e.target.value))}
@@ -328,20 +319,16 @@ function Home() {
                   ))}
                 </select>
               </div>
-
             </div>
 
-            {/* NÚT TÌM KIẾM */}
             <button className="search-btn" type="submit">
               <span>⌕</span> Tìm chuyến bay
             </button>
-
           </form>
         </section>
 
         {/* ĐIỂM ĐẾN NỔI BẬT */}
         <section className="destinations" id="destinations">
-
           <div className="section-heading">
             <div>
               <span className="eyebrow">ĐIỂM ĐẾN NỔI BẬT</span>
@@ -354,7 +341,6 @@ function Home() {
           </div>
 
           <div className="destination-grid">
-
             <article className="destination-card destination-hanoi">
               <div>
                 <span>✦</span>
@@ -378,13 +364,11 @@ function Home() {
                 <p>Thiên đường nghỉ dưỡng</p>
               </div>
             </article>
-
           </div>
         </section>
 
         {/* LỢI ÍCH */}
         <section className="benefits" id="about">
-
           <div>
             <span>✈</span>
             <h3>Đặt vé dễ dàng</h3>
@@ -402,9 +386,7 @@ function Home() {
             <h3>Hỗ trợ khách hàng</h3>
             <p>Đồng hành cùng mọi hành trình</p>
           </div>
-
         </section>
-
       </main>
 
       {/* CHÂN TRANG */}
@@ -417,11 +399,8 @@ function Home() {
           © 2026 DVMB Air. Hệ thống quản lý đặt vé máy bay.
         </p>
       </footer>
-
     </div>
   );
 }
 
 export default Home;
-
-
