@@ -79,7 +79,7 @@ function Home() {
         </nav>
 
         <div className="nav-actions">
-          <button className="login-btn">Đăng nhập</button>
+          <button className="login-btn" onClick={() => navigate("/admin/login")}>Đăng nhập</button>
           <button className="register-btn">Đăng ký</button>
         </div>
       </header>

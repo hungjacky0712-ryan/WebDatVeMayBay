@@ -1,0 +1,17 @@
+# Environment and secrets
+.env
+.env.*
+!.env.example
+
+# Database backups
+*.bak
+*.backup
+
+# Temporary scripts and logs
+reset-admin.php
+build-error.txt
+
+# Dependencies and build
+node_modules/
+vendor/
+dist/
