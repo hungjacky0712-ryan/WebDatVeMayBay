@@ -57,10 +57,10 @@ export default function AircraftManagement() {
     try {
       const [aircraftResponse, airlineResponse] = await Promise.all([
         fetch(AIRCRAFT_API, {
-          headers: { Accept: "application/json" },
+          headers: getAuthHeaders(),
         }),
         fetch(AIRLINE_API, {
-          headers: { Accept: "application/json" },
+          headers: getAuthHeaders(),
         }),
       ]);
 

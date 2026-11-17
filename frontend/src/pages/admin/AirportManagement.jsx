@@ -7,6 +7,15 @@ const API_BASE_URL = (
 ).replace(/\/+$/, "");
 
 const API_URL = `${API_BASE_URL}/api/sanbay`;
+function getAuthHeaders() {
+  const token = sessionStorage.getItem("admin_token");
+
+  return {
+    "Content-Type": "application/json",
+    Accept: "application/json",
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+  };
+}
 
 const EMPTY_FORM = {
   MaIATA: "",
@@ -31,7 +40,9 @@ function AirportManagement() {
     setError("");
 
     try {
-      const response = await fetch(API_URL);
+      const response = await fetch(API_URL, {
+           headers: getAuthHeaders(),
+    });
       const result = await response.json();
 
       if (!response.ok || !result.success) {
@@ -125,10 +136,7 @@ function AirportManagement() {
         isEditing ? `${API_URL}/${editingId}` : API_URL,
         {
           method: isEditing ? "PUT" : "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
+          headers: getAuthHeaders(),
           body: JSON.stringify({
             MaIATA: form.MaIATA.trim(),
             TenSanBay: form.TenSanBay.trim(),
@@ -181,9 +189,7 @@ function AirportManagement() {
     try {
       const response = await fetch(`${API_URL}/${airport.MaSanBay}`, {
         method: "DELETE",
-        headers: {
-          Accept: "application/json",
-        },
+        headers: getAuthHeaders(),
       });
 
       const result = await response.json();
