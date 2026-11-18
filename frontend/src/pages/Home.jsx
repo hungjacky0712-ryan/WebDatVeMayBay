@@ -1,4 +1,4 @@
-
+﻿
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -142,7 +142,7 @@ function Home() {
               {account.type === "admin" ? (
                 <button
                   className="register-btn"
-                  onClick={() => navigate("/admin/sanbay")}
+                  onClick={() => navigate("/admin/dashboard")}
                 >
                   Quản lý
                 </button>
@@ -404,3 +404,4 @@ function Home() {
 }
 
 export default Home;
+

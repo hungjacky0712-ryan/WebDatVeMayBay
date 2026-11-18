@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+﻿import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import Home from "./pages/Home";
 import FlightResults from "./pages/FlightResults";
@@ -9,6 +9,7 @@ import CustomerRegister from "./pages/CustomerRegister";
 import AirportManagement from "./pages/admin/AirportManagement";
 import AircraftManagement from "./pages/admin/AircraftManagement";
 import AdminLogin from "./pages/admin/AdminLogin";
+import AdminDashboard from "./pages/admin/AdminDashboard";
 
 import "./App.css";
 
@@ -26,14 +27,23 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Trang khách hàng */}
+        {/* Trang khÃ¡ch hÃ ng */}
         <Route path="/" element={<Home />} />
         <Route path="/flights" element={<FlightResults />} />
         <Route path="/login" element={<CustomerLogin />} />
         <Route path="/register" element={<CustomerRegister />} />
 
-        {/* Trang quản trị */}
+        {/* Trang quáº£n trá»‹ */}
         <Route path="/admin/login" element={<AdminLogin />} />
+
+        <Route
+          path="/admin/dashboard"
+          element={
+            <ProtectedAdminRoute>
+              <AdminDashboard />
+            </ProtectedAdminRoute>
+          }
+        />
 
         <Route
           path="/admin/sanbay"
@@ -53,7 +63,7 @@ function App() {
           }
         />
 
-        {/* Đường dẫn không tồn tại */}
+        {/* ÄÆ°á»ng dáº«n khÃ´ng tá»“n táº¡i */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
@@ -61,3 +71,5 @@ function App() {
 }
 
 export default App;
+
+

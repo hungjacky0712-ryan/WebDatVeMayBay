@@ -1,5 +1,4 @@
-
-import { useState } from "react";
+﻿import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./AdminLogin.css";
 
@@ -39,7 +38,7 @@ function AdminLogin() {
       sessionStorage.setItem("admin_token", result.token);
       sessionStorage.setItem("admin_user", JSON.stringify(result.user));
 
-      navigate("/admin/sanbay", { replace: true });
+      navigate("/admin/dashboard", { replace: true });
     } catch (err) {
       setError(
         err.message === "Failed to fetch"
