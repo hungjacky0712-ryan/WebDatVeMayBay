@@ -29,7 +29,7 @@ COPY --from=dependencies /app/vendor ./vendor
 
 COPY . .
 
-# Microsoft ODBC Driver 18 + PHP SQL Server extensions
+# Install SQL Server and PostgreSQL PHP drivers
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         ca-certificates \
@@ -45,16 +45,17 @@ RUN apt-get update \
         msodbcsql18 \
         unixodbc-dev \
         libgssapi-krb5-2 \
+        libpq-dev \
         gcc \
         g++ \
         make \
         autoconf \
         pkg-config \
+    && docker-php-ext-install pdo_pgsql \
     && pecl install sqlsrv \
     && pecl install pdo_sqlsrv \
     && docker-php-ext-enable sqlsrv pdo_sqlsrv \
     && rm -rf /var/lib/apt/lists/* /tmp/pear
-
 
 RUN mkdir -p \
     storage/framework/cache \
@@ -66,7 +67,6 @@ RUN mkdir -p \
     && rm -f bootstrap/cache/*.php \
     && php artisan package:discover --ansi
 
-
 RUN setcap -r /usr/local/bin/frankenphp
 
 COPY Caddyfile /etc/caddy/Caddyfile
@@ -74,4 +74,3 @@ COPY Caddyfile /etc/caddy/Caddyfile
 ENV PORT=80
 
 CMD ["frankenphp", "run", "--config", "/etc/caddy/Caddyfile"]
-
