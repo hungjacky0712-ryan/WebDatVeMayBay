@@ -1,4 +1,4 @@
-
+﻿
 FROM dunglas/frankenphp:1-php8.4-trixie AS base
 
 WORKDIR /app
@@ -67,8 +67,11 @@ RUN mkdir -p \
     && php artisan package:discover --ansi
 
 
+RUN setcap -r /usr/local/bin/frankenphp
+
 COPY Caddyfile /etc/caddy/Caddyfile
 
 ENV PORT=80
 
 CMD ["frankenphp", "run", "--config", "/etc/caddy/Caddyfile"]
+
