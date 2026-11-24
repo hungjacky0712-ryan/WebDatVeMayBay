@@ -1,0 +1,407 @@
+﻿
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+import "../App.css";
+
+const API_BASE_URL = (
+  import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000"
+).replace(/\/+$/, "");
+
+function Home() {
+  const navigate = useNavigate();
+
+  const [account, setAccount] = useState(() => {
+    const customerToken = sessionStorage.getItem("customer_token");
+    const customerUser = sessionStorage.getItem("customer_user");
+
+    if (customerToken && customerUser) {
+      try {
+        return {
+          type: "customer",
+          token: customerToken,
+          user: JSON.parse(customerUser),
+        };
+      } catch {
+        sessionStorage.removeItem("customer_token");
+        sessionStorage.removeItem("customer_user");
+      }
+    }
+
+    const adminToken = sessionStorage.getItem("admin_token");
+    const adminUser = sessionStorage.getItem("admin_user");
+
+    if (adminToken) {
+      let user = { HoTen: "Quáº£n trá»‹ viÃªn" };
+
+      try {
+        if (adminUser) user = JSON.parse(adminUser);
+      } catch {}
+
+      return {
+        type: "admin",
+        token: adminToken,
+        user,
+      };
+    }
+
+    return null;
+  });
+
+  const [trip, setTrip] = useState("round");
+  const [from, setFrom] = useState("TP. Há»“ ChÃ­ Minh (SGN)");
+  const [to, setTo] = useState("HÃ  Ná»™i (HAN)");
+  const [departure, setDeparture] = useState("");
+  const [returnDate, setReturnDate] = useState("");
+  const [passengers, setPassengers] = useState(1);
+
+  const handleLogout = async () => {
+    try {
+      if (account?.token) {
+        await fetch(`${API_BASE_URL}/api/logout`, {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${account.token}`,
+          },
+        });
+      }
+    } catch (error) {
+      console.error("Lá»—i Ä‘Äƒng xuáº¥t:", error);
+    }
+
+    sessionStorage.removeItem("customer_token");
+    sessionStorage.removeItem("customer_user");
+    sessionStorage.removeItem("admin_token");
+    sessionStorage.removeItem("admin_user");
+
+    setAccount(null);
+    navigate("/");
+  };
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+
+    if (from === to) {
+      alert("Äiá»ƒm Ä‘i vÃ  Ä‘iá»ƒm Ä‘áº¿n khÃ´ng Ä‘Æ°á»£c trÃ¹ng nhau!");
+      return;
+    }
+
+    if (!departure) {
+      alert("Vui lÃ²ng chá»n ngÃ y Ä‘i!");
+      return;
+    }
+
+    if (trip === "round" && !returnDate) {
+      alert("Vui lÃ²ng chá»n ngÃ y vá»!");
+      return;
+    }
+
+    if (trip === "round" && returnDate < departure) {
+      alert("NgÃ y vá» pháº£i tá»« ngÃ y Ä‘i trá»Ÿ Ä‘i!");
+      return;
+    }
+
+    navigate("/flights", {
+      state: {
+        from,
+        to,
+        departure,
+        returnDate: trip === "round" ? returnDate : "",
+        passengers,
+        trip,
+      },
+    });
+  };
+
+  return (
+    <div className="app">
+      {/* THANH ÄIá»€U HÆ¯á»šNG */}
+      <header className="navbar">
+        <a className="logo" href="/">
+          <span className="logo-icon">âœˆ</span>
+          <span>
+            DVMB<span className="logo-highlight"> AIR</span>
+          </span>
+        </a>
+
+        <nav>
+          <a className="active" href="#home">Trang chá»§</a>
+          <a href="#search">Äáº·t vÃ©</a>
+          <a href="#destinations">Äiá»ƒm Ä‘áº¿n</a>
+          <a href="#about">Giá»›i thiá»‡u</a>
+        </nav>
+
+        <div className="nav-actions">
+          {account ? (
+            <>
+              <span className="account-greeting">
+                Xin chÃ o, {account.user?.HoTen || "NgÆ°á»i dÃ¹ng"}
+              </span>
+
+              {account.type === "admin" ? (
+                <button
+                  className="register-btn"
+                  onClick={() => navigate("/admin/dashboard")}
+                >
+                  Quáº£n lÃ½
+                </button>
+              ) : (
+                <button
+                  className="admin-login-btn"
+                  onClick={() => navigate("/admin/login")}
+                >
+                  Quáº£n trá»‹ viÃªn
+                </button>
+              )}
+
+              <button className="login-btn" onClick={handleLogout}>
+                ÄÄƒng xuáº¥t
+              </button>
+            </>
+          ) : (
+            <>
+              <button
+                className="login-btn"
+                onClick={() => navigate("/login")}
+              >
+                ÄÄƒng nháº­p
+              </button>
+
+              <button
+                className="register-btn"
+                onClick={() => navigate("/register")}
+              >
+                ÄÄƒng kÃ½
+              </button>
+
+              <button
+                className="admin-login-btn"
+                onClick={() => navigate("/admin/login")}
+              >
+                Quáº£n trá»‹ viÃªn
+              </button>
+            </>
+          )}
+        </div>
+      </header>
+
+      <main>
+        {/* BANNER */}
+        <section className="hero" id="home">
+          <div className="hero-content">
+            <span className="hero-label">
+              KHÃM PHÃ THáº¾ GIá»šI CÃ™NG DVMB AIR
+            </span>
+
+            <h1>
+              HÃ nh trÃ¬nh má»›i,
+              <br />
+              Tráº£i nghiá»‡m má»›i.
+            </h1>
+
+            <p>
+              TÃ¬m kiáº¿m chuyáº¿n bay, lá»±a chá»n hÃ nh trÃ¬nh vÃ  Ä‘áº·t vÃ©
+              dá»… dÃ ng chá»‰ trong vÃ i bÆ°á»›c.
+            </p>
+
+            <a href="#search" className="hero-btn">
+              KhÃ¡m phÃ¡ chuyáº¿n bay â†’
+            </a>
+          </div>
+
+          <div className="hero-decoration">âœˆ</div>
+        </section>
+
+        {/* FORM TÃŒM KIáº¾M */}
+        <section className="booking-section" id="search">
+          <div className="section-heading">
+            <div>
+              <span className="eyebrow">Äáº¶T VÃ‰ TRá»°C TUYáº¾N</span>
+              <h2>TÃ¬m chuyáº¿n bay cá»§a báº¡n</h2>
+            </div>
+
+            <span className="booking-icon">âœˆ</span>
+          </div>
+
+          <form className="booking-form" onSubmit={handleSearch}>
+            <div className="trip-options">
+              <label>
+                <input
+                  type="radio"
+                  name="trip"
+                  checked={trip === "round"}
+                  onChange={() => setTrip("round")}
+                />
+                Khá»© há»“i
+              </label>
+
+              <label>
+                <input
+                  type="radio"
+                  name="trip"
+                  checked={trip === "one"}
+                  onChange={() => setTrip("one")}
+                />
+                Má»™t chiá»u
+              </label>
+            </div>
+
+            <div className="form-grid">
+              <div className="field">
+                <label>ÄIá»‚M KHá»žI HÃ€NH</label>
+                <select
+                  value={from}
+                  onChange={(e) => setFrom(e.target.value)}
+                >
+                  <option>TP. Há»“ ChÃ­ Minh (SGN)</option>
+                  <option>HÃ  Ná»™i (HAN)</option>
+                  <option>ÄÃ  Náºµng (DAD)</option>
+                  <option>PhÃº Quá»‘c (PQC)</option>
+                  <option>Nha Trang (CXR)</option>
+                </select>
+              </div>
+
+              <div className="field">
+                <label>ÄIá»‚M Äáº¾N</label>
+                <select
+                  value={to}
+                  onChange={(e) => setTo(e.target.value)}
+                >
+                  <option>HÃ  Ná»™i (HAN)</option>
+                  <option>TP. Há»“ ChÃ­ Minh (SGN)</option>
+                  <option>ÄÃ  Náºµng (DAD)</option>
+                  <option>PhÃº Quá»‘c (PQC)</option>
+                  <option>Nha Trang (CXR)</option>
+                </select>
+              </div>
+
+              <div className="field">
+                <label>NGÃ€Y ÄI</label>
+                <input
+                  type="date"
+                  value={departure}
+                  min={new Date().toLocaleDateString("en-CA")}
+                  onChange={(e) => {
+                    setDeparture(e.target.value);
+
+                    if (returnDate && e.target.value > returnDate) {
+                      setReturnDate("");
+                    }
+                  }}
+                  required
+                />
+              </div>
+
+              {trip === "round" && (
+                <div className="field">
+                  <label>NGÃ€Y Vá»€</label>
+                  <input
+                    type="date"
+                    value={returnDate}
+                    min={departure || new Date().toLocaleDateString("en-CA")}
+                    onChange={(e) => setReturnDate(e.target.value)}
+                    required
+                  />
+                </div>
+              )}
+
+              <div className="field">
+                <label>HÃ€NH KHÃCH</label>
+                <select
+                  value={passengers}
+                  onChange={(e) => setPassengers(Number(e.target.value))}
+                >
+                  {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((number) => (
+                    <option key={number} value={number}>
+                      {number} hÃ nh khÃ¡ch
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            <button className="search-btn" type="submit">
+              <span>âŒ•</span> TÃ¬m chuyáº¿n bay
+            </button>
+          </form>
+        </section>
+
+        {/* ÄIá»‚M Äáº¾N Ná»”I Báº¬T */}
+        <section className="destinations" id="destinations">
+          <div className="section-heading">
+            <div>
+              <span className="eyebrow">ÄIá»‚M Äáº¾N Ná»”I Báº¬T</span>
+              <h2>KhÃ¡m phÃ¡ Viá»‡t Nam</h2>
+            </div>
+
+            <a href="#search" className="view-all">
+              KhÃ¡m phÃ¡ ngay â†’
+            </a>
+          </div>
+
+          <div className="destination-grid">
+            <article className="destination-card destination-hanoi">
+              <div>
+                <span>âœ¦</span>
+                <h3>HÃ  Ná»™i</h3>
+                <p>Thá»§ Ä‘Ã´ nghÃ¬n nÄƒm vÄƒn hiáº¿n</p>
+              </div>
+            </article>
+
+            <article className="destination-card destination-danang">
+              <div>
+                <span>âœ¦</span>
+                <h3>ÄÃ  Náºµng</h3>
+                <p>ThÃ nh phá»‘ biá»ƒn Ä‘Ã¡ng sá»‘ng</p>
+              </div>
+            </article>
+
+            <article className="destination-card destination-phuquoc">
+              <div>
+                <span>âœ¦</span>
+                <h3>PhÃº Quá»‘c</h3>
+                <p>ThiÃªn Ä‘Æ°á»ng nghá»‰ dÆ°á»¡ng</p>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        {/* Lá»¢I ÃCH */}
+        <section className="benefits" id="about">
+          <div>
+            <span>âœˆ</span>
+            <h3>Äáº·t vÃ© dá»… dÃ ng</h3>
+            <p>Tra cá»©u hÃ nh trÃ¬nh thuáº­n tiá»‡n</p>
+          </div>
+
+          <div>
+            <span>â—ˆ</span>
+            <h3>ThÃ´ng tin rÃµ rÃ ng</h3>
+            <p>Chi tiáº¿t chuyáº¿n bay minh báº¡ch</p>
+          </div>
+
+          <div>
+            <span>â™¡</span>
+            <h3>Há»— trá»£ khÃ¡ch hÃ ng</h3>
+            <p>Äá»“ng hÃ nh cÃ¹ng má»i hÃ nh trÃ¬nh</p>
+          </div>
+        </section>
+      </main>
+
+      {/* CHÃ‚N TRANG */}
+      <footer>
+        <a className="logo footer-logo" href="/">
+          âœˆ DVMB AIR
+        </a>
+
+        <p>
+          Â© 2026 DVMB Air. Há»‡ thá»‘ng quáº£n lÃ½ Ä‘áº·t vÃ© mÃ¡y bay.
+        </p>
+      </footer>
+    </div>
+  );
+}
+
+export default Home;
+

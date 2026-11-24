@@ -1,0 +1,214 @@
+
+.user-dashboard {
+  max-width: 1450px;
+  margin: 0 auto;
+}
+
+.user-welcome {
+  min-height: 245px;
+  padding: 35px 42px;
+  border-radius: 16px;
+  background: linear-gradient(120deg, #125a9c, #258bd0);
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
+}
+
+.welcome-label {
+  font-size: 11px;
+  letter-spacing: 2px;
+  opacity: 0.8;
+}
+
+.user-welcome h1 {
+  font-size: 29px;
+  margin: 13px 0;
+}
+
+.user-welcome p {
+  font-size: 13px;
+  line-height: 1.7;
+  max-width: 510px;
+  color: #e6f3ff;
+}
+
+.user-welcome button {
+  margin-top: 15px;
+  background: white;
+  color: #1769aa;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 18px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.user-welcome button:hover {
+  background: #eaf4ff;
+}
+
+.welcome-plane {
+  font-size: 110px;
+  opacity: 0.2;
+  transform: rotate(-12deg);
+  margin-right: 35px;
+}
+
+.user-section {
+  margin-top: 32px;
+}
+
+.user-section-heading h2 {
+  font-size: 20px;
+  margin: 0;
+}
+
+.user-section-heading p {
+  font-size: 12px;
+  color: #8794a7;
+  margin: 7px 0 20px;
+}
+
+.user-feature-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.user-feature-card {
+  background: white;
+  border: 1px solid #e6ebf2;
+  border-radius: 13px;
+  padding: 20px;
+  min-height: 205px;
+  transition: 0.2s;
+}
+
+.user-feature-card.available:hover {
+  border-color: #91c5f2;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 22px rgba(30, 100, 160, 0.08);
+}
+
+.feature-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.feature-icon {
+  width: 43px;
+  height: 43px;
+  display: grid;
+  place-items: center;
+  border-radius: 11px;
+  background: #e8f2ff;
+  color: #1769aa;
+  font-size: 22px;
+}
+
+.feature-status {
+  font-size: 10px;
+  padding: 5px 8px;
+  border-radius: 5px;
+}
+
+.feature-status.ready {
+  background: #e2f6eb;
+  color: #21834d;
+}
+
+.feature-status.pending {
+  background: #fff3db;
+  color: #a36b16;
+}
+
+.user-feature-card h3 {
+  font-size: 15px;
+  margin: 17px 0 8px;
+  color: #243b5a;
+}
+
+.user-feature-card p {
+  font-size: 12px;
+  line-height: 1.6;
+  color: #8290a3;
+  min-height: 38px;
+}
+
+.user-feature-card button {
+  border: none;
+  background: transparent;
+  color: #1769aa;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 8px 0 0;
+  cursor: pointer;
+}
+
+.user-feature-card button:disabled {
+  color: #a0a8b5;
+  cursor: not-allowed;
+}
+
+.user-notice {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  background: #edf6ff;
+  border: 1px solid #d8eaff;
+  padding: 17px;
+  border-radius: 10px;
+  margin-top: 25px;
+}
+
+.notice-icon {
+  color: #1769aa;
+  font-size: 20px;
+}
+
+.user-notice strong {
+  font-size: 12px;
+  color: #24517d;
+}
+
+.user-notice p {
+  font-size: 11px;
+  color: #66819e;
+  line-height: 1.6;
+  margin: 6px 0 0;
+}
+
+@media (max-width: 1000px) {
+  .user-feature-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .user-welcome {
+    padding: 25px 20px;
+  }
+
+  .user-welcome h1 {
+    font-size: 23px;
+  }
+
+  .welcome-plane {
+    display: none;
+  }
+
+  .user-feature-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.user-welcome {
+  min-height: 245px;
+  background: linear-gradient(120deg, #125a9c, #258bd0);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

@@ -11,48 +11,100 @@ use Illuminate\Database\QueryException;
 class ChuyenBayController extends Controller
 {
     // 1. DANH SACH CHUYEN BAY
-    public function index()
-    {
-        $data = DB::table('ChuyenBay')
-            ->join(
-                'HangHangKhong',
-                'ChuyenBay.MaHang',
-                '=',
-                'HangHangKhong.MaHang'
-            )
-            ->leftJoin(
-                'MayBay',
-                'ChuyenBay.MaMayBay',
-                '=',
-                'MayBay.MaMayBay'
-            )
-            ->join(
-                'SanBay as SanBayDi',
-                'ChuyenBay.MaSanBayDi',
-                '=',
-                'SanBayDi.MaSanBay'
-            )
-            ->join(
-                'SanBay as SanBayDen',
-                'ChuyenBay.MaSanBayDen',
-                '=',
-                'SanBayDen.MaSanBay'
-            )
-            ->select(
-                'ChuyenBay.*',
-                'HangHangKhong.TenHang',
-                'MayBay.DongMay',
-                'SanBayDi.TenSanBay as TenSanBayDi',
-                'SanBayDen.TenSanBay as TenSanBayDen'
-            )
-            ->orderBy('ChuyenBay.GioKhoiHanh')
-            ->get();
+    
+public function index(Request $request)
+{
+    // Kiểm tra dữ liệu tìm kiếm
+    $validated = $request->validate([
+        'from' => 'nullable|string|max:3',
+        'to' => 'nullable|string|max:3',
+        'departure' => 'nullable|date_format:Y-m-d',
+    ]);
 
-        return response()->json([
-            'success' => true,
-            'data' => $data
-        ]);
+    $query = DB::table('ChuyenBay')
+        ->join(
+            'HangHangKhong',
+            'ChuyenBay.MaHang',
+            '=',
+            'HangHangKhong.MaHang'
+        )
+        ->leftJoin(
+            'MayBay',
+            'ChuyenBay.MaMayBay',
+            '=',
+            'MayBay.MaMayBay'
+        )
+        ->join(
+            'SanBay as SanBayDi',
+            'ChuyenBay.MaSanBayDi',
+            '=',
+            'SanBayDi.MaSanBay'
+        )
+        ->join(
+            'SanBay as SanBayDen',
+            'ChuyenBay.MaSanBayDen',
+            '=',
+            'SanBayDen.MaSanBay'
+        )
+        ->select(
+            'ChuyenBay.*',
+            'HangHangKhong.TenHang',
+            'HangHangKhong.MaIATA as IATAHang',
+            'MayBay.DongMay',
+            'SanBayDi.TenSanBay as TenSanBayDi',
+            'SanBayDi.MaIATA as IATADi',
+            'SanBayDen.TenSanBay as TenSanBayDen',
+            'SanBayDen.MaIATA as IATADen'
+        );
+
+    // Lọc sân bay đi
+    if (!empty($validated['from'])) {
+        $query->where(
+            'SanBayDi.MaIATA',
+            strtoupper($validated['from'])
+        );
     }
+
+    // Lọc sân bay đến
+    if (!empty($validated['to'])) {
+        $query->where(
+            'SanBayDen.MaIATA',
+            strtoupper($validated['to'])
+        );
+    }
+
+    // Lọc ngày khởi hành
+    if (!empty($validated['departure'])) {
+        $query->whereDate(
+            'ChuyenBay.GioKhoiHanh',
+            $validated['departure']
+        );
+    }
+
+    // Chỉ hiển thị chuyến đã lên lịch hoặc đang bị trễ
+    $query->whereIn('ChuyenBay.TrangThai', [
+        'DaLenLich',
+        'TreGio'
+    ]);
+
+    // Chỉ lấy chuyến chưa khởi hành
+    $query->where(
+        'ChuyenBay.GioKhoiHanh',
+        '>',
+        now()
+    );
+
+    // Lấy dữ liệu từ database
+    $data = $query
+        ->orderBy('ChuyenBay.GioKhoiHanh')
+        ->get();
+
+    return response()->json([
+        'success' => true,
+        'data' => $data
+    ]);
+}
+
 
     // 2. CHI TIET CHUYEN BAY
     public function show($id)

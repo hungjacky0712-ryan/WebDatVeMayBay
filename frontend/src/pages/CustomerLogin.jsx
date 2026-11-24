@@ -33,13 +33,14 @@ function CustomerLogin() {
       const result = await response.json();
 
       if (!response.ok || !result.success || !result.token) {
-        throw new Error(result.message || "Đăng nhập thất bại.");
-      }
+  throw new Error(result.message || "Đăng nhập thất bại.");
+}
 
-      sessionStorage.setItem("customer_token", result.token);
-      sessionStorage.setItem("customer_user", JSON.stringify(result.user));
+sessionStorage.setItem("customer_token", result.token);
+sessionStorage.setItem("customer_user", JSON.stringify(result.user));
 
-      navigate("/", { replace: true });
+// Chuyển đến giao diện User mới
+navigate("/user/dashboard", { replace: true });
     } catch (err) {
       setError(
         err.message === "Failed to fetch"

@@ -1,0 +1,146 @@
+/* TRANG KẾT QUẢ CHUYẾN BAY */
+
+.results-page {
+  width: 86%;
+  max-width: 1200px;
+  margin: 45px auto;
+  min-height: 65vh;
+}
+
+.back-btn {
+  border: none;
+  background: none;
+  color: #087ee5;
+  cursor: pointer;
+  margin-bottom: 25px;
+}
+
+.results-heading {
+  margin-bottom: 30px;
+}
+
+.results-heading h1 {
+  color: #173c69;
+  margin-bottom: 10px;
+}
+
+.results-heading p {
+  color: #718198;
+}
+
+.flight-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.flight-card {
+  display: grid;
+  grid-template-columns: 1.4fr 0.7fr 1fr 0.7fr 1fr;
+  align-items: center;
+  gap: 18px;
+  background: white;
+  padding: 24px;
+  border-radius: 13px;
+  box-shadow: 0 5px 20px #16365c0d;
+}
+
+.airline-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.airline-logo {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #e8f3ff;
+  color: #087ee5;
+}
+
+.airline-info strong,
+.flight-time strong,
+.flight-price strong {
+  display: block;
+  color: #173c69;
+}
+
+.airline-info small,
+.flight-time small,
+.flight-price small {
+  display: block;
+  margin-top: 6px;
+  color: #8290a3;
+  font-size: 12px;
+}
+
+.flight-duration {
+  text-align: center;
+  color: #8290a3;
+  font-size: 12px;
+}
+
+.flight-line {
+  height: 1px;
+  background: #a8c9e9;
+  margin: 9px 0;
+}
+
+.flight-price button {
+  margin-top: 12px;
+  border: none;
+  background: #087ee5;
+  color: white;
+  border-radius: 7px;
+  padding: 10px 14px;
+  cursor: pointer;
+}
+
+.flight-price button:hover {
+  background: #0565bd;
+}
+
+.demo-note {
+  color: #8795a8;
+  font-size: 12px;
+  margin-top: 20px;
+}
+
+/* RESPONSIVE TRANG KẾT QUẢ */
+
+@media (max-width: 1000px) {
+  .flight-card {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .flight-duration {
+    order: 2;
+  }
+
+  .flight-price {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 560px) {
+  .results-page {
+    width: 92%;
+  }
+
+  .flight-card {
+    grid-template-columns: 1fr;
+    padding: 20px;
+  }
+
+  .flight-duration {
+    order: initial;
+    text-align: left;
+  }
+
+  .flight-price {
+    grid-column: auto;
+  }
+}
