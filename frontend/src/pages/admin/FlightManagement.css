@@ -1,0 +1,392 @@
+
+/* ==============================
+   TỔNG THỂ
+============================== */
+.flight-page {
+  min-height: 100vh;
+  background: #f3f7fc;
+  color: #172b4d;
+  font-family: inherit;
+}
+
+.flight-page * {
+  box-sizing: border-box;
+}
+
+.flight-container {
+  width: min(1400px, 90%);
+  margin: 0 auto;
+  padding: 32px 0 60px;
+}
+
+/* ==============================
+   HEADER
+============================== */
+.flight-heading {
+  min-height: 190px;
+  margin-bottom: 28px;
+  padding: 38px 5%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  border-radius: 15px;
+  background: linear-gradient(120deg, #082e60, #087ee5);
+  color: white;
+}
+
+.flight-eyebrow {
+  display: inline-block;
+  margin: 0 0 12px;
+  color: #dceaff;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  opacity: 0.85;
+}
+
+.flight-heading h1 {
+  margin: 0;
+  color: white;
+  font-size: 32px;
+  font-weight: 750;
+}
+
+.flight-subtitle {
+  margin: 10px 0 0;
+  color: #dceaff;
+  font-size: 15px;
+}
+
+/* ==============================
+   PANEL
+============================== */
+.flight-panel {
+  margin-bottom: 25px;
+  padding: 28px;
+  border: 1px solid #e5edf6;
+  border-radius: 15px;
+  background: #fff;
+  box-shadow: 0 5px 22px rgba(20, 55, 90, 0.045);
+}
+
+.flight-panel-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 25px;
+}
+
+.flight-panel-title h2 {
+  margin: 0;
+  color: #102d52;
+  font-size: 21px;
+  font-weight: 700;
+}
+
+.flight-count {
+  margin: 7px 0 0;
+  color: #8291a5;
+  font-size: 13px;
+}
+
+/* ==============================
+   FORM
+============================== */
+.flight-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.flight-form > label {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  color: #344b68;
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.flight-form input,
+.flight-form select {
+  width: 100%;
+  min-height: 45px;
+  padding: 0 14px;
+  border: 1px solid #dce5ef;
+  border-radius: 8px;
+  outline: none;
+  background: #fbfdff;
+  color: #172b4d;
+  font: inherit;
+  font-size: 14px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.flight-form input:focus,
+.flight-form select:focus {
+  border-color: #087ee5;
+  box-shadow: 0 0 0 3px rgba(8, 126, 229, 0.1);
+}
+
+.flight-form input::placeholder {
+  color: #a8b4c3;
+}
+
+.flight-form input:disabled,
+.flight-form select:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+/* ==============================
+   NÚT FORM
+============================== */
+.flight-form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  grid-column: 1 / -1;
+  margin-top: 5px;
+}
+
+.flight-button {
+  min-height: 40px;
+  padding: 0 17px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 650;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.flight-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.flight-button:not(:disabled):active {
+  transform: scale(0.98);
+}
+
+.flight-button-primary {
+  background: #087ee5;
+  color: #fff;
+}
+
+.flight-button-primary:hover:not(:disabled) {
+  background: #066bc5;
+}
+
+.flight-button-light {
+  border-color: #dce5ef;
+  background: #fff;
+  color: #435a75;
+}
+
+.flight-button-light:hover:not(:disabled) {
+  background: #f2f7fd;
+}
+
+/* ==============================
+   HỦY CHỈNH SỬA
+============================== */
+.flight-text-button {
+  padding: 8px 13px;
+  border: 1px solid #c9e1ff;
+  border-radius: 7px;
+  background: #eff7ff;
+  color: #0874d1;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 650;
+}
+
+.flight-text-button:hover {
+  background: #dceeff;
+}
+
+/* ==============================
+   THÔNG BÁO
+============================== */
+.flight-alert {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  margin-bottom: 20px;
+  padding: 14px 17px;
+  border-radius: 9px;
+  font-size: 14px;
+  white-space: pre-line;
+}
+
+.flight-alert-error {
+  border: 1px solid #f3c5c5;
+  background: #fff3f3;
+  color: #bd3030;
+}
+
+.flight-alert-success {
+  border: 1px solid #bce8d0;
+  background: #effbf4;
+  color: #167a45;
+}
+
+/* ==============================
+   GHI CHÚ
+============================== */
+.flight-note {
+  margin: 20px 0 0;
+  padding: 13px 16px;
+  border: 1px solid #d6e9fc;
+  border-radius: 8px;
+  background: #eef6ff;
+  color: #37658f;
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+/* ==============================
+   BẢNG CHUYẾN BAY
+============================== */
+.flight-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.flight-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.flight-table th {
+  padding: 15px 13px;
+  border-top: 1px solid #e9eff6;
+  border-bottom: 1px solid #e9eff6;
+  background: #f7faff;
+  color: #6d8098;
+  font-size: 11px;
+  font-weight: 750;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.flight-table td {
+  padding: 16px 13px;
+  border-bottom: 1px solid #edf1f6;
+  color: #60728a;
+  font-size: 13px;
+}
+
+.flight-table tbody tr:hover {
+  background: #f8fbff;
+}
+
+.flight-empty {
+  height: 110px;
+  color: #8998aa !important;
+  text-align: center;
+}
+
+/* ==============================
+   TRẠNG THÁI
+============================== */
+.flight-table td:nth-child(8) {
+  color: #0874d1;
+  font-weight: 650;
+}
+
+/* ==============================
+   NÚT SỬA / XÓA
+============================== */
+.flight-row-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.flight-row-actions button {
+  padding: 6px 11px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 650;
+}
+
+.flight-action-edit {
+  border-color: #c9e1ff !important;
+  background: #eff7ff;
+  color: #0874d1;
+}
+
+.flight-action-edit:hover {
+  background: #dceeff;
+}
+
+.flight-action-delete {
+  border-color: #f4d0d0 !important;
+  background: #fff4f4;
+  color: #d34242;
+}
+
+.flight-action-delete:hover {
+  background: #ffe5e5;
+}
+
+/* ==============================
+   RESPONSIVE
+============================== */
+@media (max-width: 768px) {
+  .flight-container {
+    width: 94%;
+    padding-top: 20px;
+  }
+
+  .flight-heading {
+    min-height: 160px;
+    padding: 28px 5%;
+  }
+
+  .flight-heading h1 {
+    font-size: 25px;
+  }
+
+  .flight-panel {
+    padding: 19px 15px;
+  }
+
+  .flight-form {
+    grid-template-columns: 1fr;
+  }
+
+  .flight-panel-title {
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 480px) {
+  .flight-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .flight-form-actions {
+    flex-direction: column;
+  }
+
+  .flight-form-actions button {
+    width: 100%;
+  }
+
+  .flight-panel-title {
+    flex-direction: column;
+  }
+}

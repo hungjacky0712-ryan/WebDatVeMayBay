@@ -520,6 +520,7 @@ export default function AircraftManagement() {
             <table className="aircraft-table">
               <thead>
                 <tr>
+                  <th>STT</th>
                   <th>Mã máy bay</th>
                   <th>Hãng hàng không</th>
                   <th>Dòng máy</th>
@@ -530,67 +531,67 @@ export default function AircraftManagement() {
               </thead>
 
               <tbody>
-                {loading ? (
-                  <tr>
-                    <td colSpan="6" className="aircraft-empty">
-                      Đang tải dữ liệu...
-                    </td>
-                  </tr>
-                ) : filteredAircraft.length === 0 ? (
-                  <tr>
-                    <td colSpan="6" className="aircraft-empty">
-                      Không tìm thấy máy bay phù hợp.
-                    </td>
-                  </tr>
-                ) : (
-                  filteredAircraft.map((item) => (
-                    <tr key={item.MaMayBay}>
-                      <td>#{item.MaMayBay}</td>
+  {loading ? (
+    <tr>
+      <td colSpan="7" className="aircraft-empty">
+        Đang tải dữ liệu...
+      </td>
+    </tr>
+  ) : filteredAircraft.length === 0 ? (
+    <tr>
+      <td colSpan="7" className="aircraft-empty">
+        Không tìm thấy máy bay phù hợp.
+      </td>
+    </tr>
+  ) : (
+    filteredAircraft.map((item, index) => (
+      <tr key={item.MaMayBay}>
+        <td className="aircraft-stt">{index + 1}</td>
 
-                      <td>
-                        <div className="aircraft-name">
-                          {item.TenHang || `Hãng ${item.MaHang}`}
-                        </div>
-                        <span className="aircraft-iata">
-                          {item.MaIATA || "--"}
-                        </span>
-                      </td>
+        <td>#{item.MaMayBay}</td>
 
-                      <td className="aircraft-model">
-                        {item.DongMay}
-                      </td>
+        <td>
+          <div className="aircraft-name">
+            {item.TenHang || `Hãng ${item.MaHang}`}
+          </div>
+          <span className="aircraft-iata">
+            {item.MaIATA || "--"}
+          </span>
+        </td>
 
-                      <td>{item.SoDangKy}</td>
+        <td className="aircraft-model">{item.DongMay}</td>
 
-                      <td>
-                        <span className="aircraft-seats">
-                          {item.TongSoGhe} ghế
-                        </span>
-                      </td>
+        <td>{item.SoDangKy}</td>
 
-                      <td>
-                        <div className="aircraft-row-actions">
-                          <button
-                            type="button"
-                            className="aircraft-action-edit"
-                            onClick={() => handleEdit(item)}
-                          >
-                            Sửa
-                          </button>
+        <td>
+          <span className="aircraft-seats">
+            {item.TongSoGhe} ghế
+          </span>
+        </td>
 
-                          <button
-                            type="button"
-                            className="aircraft-action-delete"
-                            onClick={() => handleDelete(item.MaMayBay)}
-                          >
-                            Xóa
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
+        <td>
+          <div className="aircraft-row-actions">
+            <button
+              type="button"
+              className="aircraft-action-edit"
+              onClick={() => handleEdit(item)}
+            >
+              Sửa
+            </button>
+
+            <button
+              type="button"
+              className="aircraft-action-delete"
+              onClick={() => handleDelete(item.MaMayBay)}
+            >
+              Xóa
+            </button>
+          </div>
+        </td>
+      </tr>
+    ))
+  )}
+</tbody>
             </table>
           </div>
 

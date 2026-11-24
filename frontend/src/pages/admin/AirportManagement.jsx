@@ -396,6 +396,7 @@ function AirportManagement() {
             <table className="airport-table">
               <thead>
                 <tr>
+                  <th>STT</th>
                   <th>Mã</th>
                   <th>Mã IATA</th>
                   <th>Tên sân bay</th>
@@ -408,25 +409,26 @@ function AirportManagement() {
               <tbody>
                 {loading ? (
                   <tr>
-                    <td colSpan="6" className="airport-empty">
+                    <td colSpan="7" className="airport-empty">
                       Đang tải dữ liệu...
                     </td>
                   </tr>
                 ) : filteredAirports.length === 0 ? (
                   <tr>
-                    <td colSpan="6" className="airport-empty">
+                    <td colSpan="7" className="airport-empty">
                       {keyword
                         ? "Không tìm thấy sân bay phù hợp."
                         : "Chưa có dữ liệu sân bay."}
                     </td>
                   </tr>
                 ) : (
-                  filteredAirports.map((airport) => (
+                  filteredAirports.map((airport,index) => (
                     <tr key={airport.MaSanBay}>
+                      <td>{index + 1}</td>
                       <td>#{airport.MaSanBay}</td>
                       <td>
                         <span className="airport-iata">
-                          {airport.MaIATA.trim()}
+                          {airport.MaIATA.trim() || "--"}
                         </span>
                       </td>
                       <td className="airport-name">{airport.TenSanBay}</td>

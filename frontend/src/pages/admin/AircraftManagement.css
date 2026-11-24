@@ -451,3 +451,13 @@
     min-width: 90px;
   }
 }
+/* Cột STT */
+.aircraft-table th:first-child,
+.aircraft-table td.aircraft-stt {
+  display: table-cell !important;
+  width: 65px;
+  min-width: 65px;
+  text-align: center;
+  color: #0874d1;
+  font-weight: 700;
+}
