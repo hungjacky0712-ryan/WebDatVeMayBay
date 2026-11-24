@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\SanBayController;
 use App\Http\Controllers\Api\MayBayController;
 use App\Http\Controllers\Api\ChuyenBayController;
+use App\Http\Controllers\Api\HanhKhachController;
 
 use App\Http\Middleware\AdminOnly;
 
@@ -128,6 +129,12 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::patch('/chuyenbay/{id}', [ChuyenBayController::class, 'update']);
 
         Route::delete('/chuyenbay/{id}', [ChuyenBayController::class, 'destroy']);
+        // QUAN LY HANH KHACH
+        Route::get('/hanhkhach', [HanhKhachController::class, 'index']);
+        Route::get('/hanhkhach/{id}', [HanhKhachController::class, 'show']);
+        Route::post('/hanhkhach', [HanhKhachController::class, 'store']);
+        Route::put('/hanhkhach/{id}', [HanhKhachController::class, 'update']);
+        Route::delete('/hanhkhach/{id}', [HanhKhachController::class, 'destroy']);
 
 
         // ---------------------------------------------
