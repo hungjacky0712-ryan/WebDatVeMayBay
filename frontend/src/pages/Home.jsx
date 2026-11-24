@@ -49,7 +49,7 @@ function Home() {
   });
 
   const [trip, setTrip] = useState("round");
-  const [from, setFrom] = useState("TP. Hồ Chí Minh (SGN)");
+  const [from, setFrom] = useState("TP. Hồ Chí Minh (SGT)");
   const [to, setTo] = useState("Hà Nội (HAN)");
   const [departure, setDeparture] = useState("");
   const [returnDate, setReturnDate] = useState("");
