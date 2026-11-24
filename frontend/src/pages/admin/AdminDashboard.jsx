@@ -24,14 +24,14 @@ function AdminDashboard() {
       description: "Theo dõi và quản lý các chuyến bay.",
       icon: "🗺",
       color: "purple",
-      path: null,
+      path: "/admin/chuyenbay",
     },
     {
       title: "Quản lý khách hàng",
       description: "Xem và quản lý thông tin khách hàng.",
       icon: "👥",
       color: "orange",
-      path: null,
+      path: "/admin/hanhkhach",
     },
   ];
 

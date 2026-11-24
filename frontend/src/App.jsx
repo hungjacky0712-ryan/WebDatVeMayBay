@@ -10,6 +10,8 @@ import AirportManagement from "./pages/admin/AirportManagement";
 import AircraftManagement from "./pages/admin/AircraftManagement";
 import AdminLogin from "./pages/admin/AdminLogin";
 import AdminDashboard from "./pages/admin/AdminDashboard";
+import FlightManagement from "./pages/admin/FlightManagement";
+import PassengerManagement from "./pages/admin/PassengerManagement";
 
 import "./App.css";
 
@@ -61,7 +63,25 @@ function App() {
               <AircraftManagement />
             </ProtectedAdminRoute>
           }
+          
         />
+        <Route
+  path="/admin/chuyenbay"
+  element={
+    <ProtectedAdminRoute>
+      <FlightManagement />
+    </ProtectedAdminRoute>
+  }
+/>
+
+<Route
+  path="/admin/hanhkhach"
+  element={
+    <ProtectedAdminRoute>
+      <PassengerManagement />
+    </ProtectedAdminRoute>
+  }
+/>
 
         {/* ÄÆ°á»ng dáº«n khÃ´ng tá»“n táº¡i */}
         <Route path="*" element={<Navigate to="/" replace />} />

@@ -31,56 +31,125 @@ class SanBayController extends Controller
     }
 
     // CREATE: Thêm sân bay
-    public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'MaIATA' => [
-                'required',
-                'string',
-                'size:3',
-                Rule::unique('SanBay', 'MaIATA'),
-            ],
-            'TenSanBay' => ['required', 'string', 'max:150'],
-            'ThanhPho' => ['required', 'string', 'max:100'],
-            'QuocGia' => ['required', 'string', 'max:60'],
-        ]);
+    
 
-        $sanBay = SanBay::create($validated);
+public function store(Request $request)
+{
+    $validated = $request->validate([
+        'MaHang' => 'required|integer|exists:HangHangKhong,MaHang',
+        'MaMayBay' => 'nullable|integer|exists:MayBay,MaMayBay',
+        'SoHieuChuyenBay' => 'required|string|max:40',
+        'MaSanBayDi' => 'required|integer|exists:SanBay,MaSanBay',
+        'MaSanBayDen' => 'required|integer|different:MaSanBayDi|exists:SanBay,MaSanBay',
+        'GioKhoiHanh' => 'required|date',
+        'GioDen' => 'required|date|after:GioKhoiHanh',
+        'TrangThai' => 'required|in:DaLenLich,DaKhoiHanh,TreGio,DaDen,DaHuy'
+    ]);
+
+    try {
+        // CHUYEN DINH DANG DATETIME-LOCAL SANG SQL SERVER
+        $validated['GioKhoiHanh'] = date(
+            'Y-m-d H:i:s',
+            strtotime($validated['GioKhoiHanh'])
+        );
+
+        $validated['GioDen'] = date(
+            'Y-m-d H:i:s',
+            strtotime($validated['GioDen'])
+        );
+
+        $id = DB::table('ChuyenBay')->insertGetId(
+            $validated,
+            'MaChuyenBay'
+        );
 
         return response()->json([
             'success' => true,
-            'message' => 'Thêm sân bay thành công!',
-            'data' => $sanBay
+            'message' => 'Them chuyen bay thanh cong.',
+            'MaChuyenBay' => $id
         ], 201);
+
+    } catch (QueryException $e) {
+
+        Log::error('LOI THEM CHUYEN BAY', [
+            'message' => $e->getMessage(),
+            'sql_state' => $e->errorInfo[0] ?? null,
+            'driver_code' => $e->errorInfo[1] ?? null,
+            'driver_message' => $e->errorInfo[2] ?? null,
+            'payload' => $validated
+        ]);
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Khong the them chuyen bay.',
+            'debug' => config('app.debug') ? $e->getMessage() : null
+        ], 409);
     }
+}
+
 
     // UPDATE: Cập nhật sân bay
-    public function update(Request $request, $id)
-    {
-        $sanBay = SanBay::findOrFail($id);
+    
+public function update(Request $request, $id)
+{
+    $validated = $request->validate([
+        'MaHang' => 'required|integer|exists:HangHangKhong,MaHang',
+        'MaMayBay' => 'nullable|integer|exists:MayBay,MaMayBay',
+        'SoHieuChuyenBay' => 'required|string|max:40',
+        'MaSanBayDi' => 'required|integer|exists:SanBay,MaSanBay',
+        'MaSanBayDen' => 'required|integer|different:MaSanBayDi|exists:SanBay,MaSanBay',
+        'GioKhoiHanh' => 'required|date',
+        'GioDen' => 'required|date|after:GioKhoiHanh',
+        'TrangThai' => 'required|in:DaLenLich,DaKhoiHanh,TreGio,DaDen,DaHuy'
+    ]);
 
-        $validated = $request->validate([
-            'MaIATA' => [
-                'sometimes',
-                'required',
-                'string',
-                'size:3',
-                Rule::unique('SanBay', 'MaIATA')
-                    ->ignore($sanBay->MaSanBay, 'MaSanBay'),
-            ],
-            'TenSanBay' => ['sometimes', 'required', 'string', 'max:150'],
-            'ThanhPho' => ['sometimes', 'required', 'string', 'max:100'],
-            'QuocGia' => ['sometimes', 'required', 'string', 'max:60'],
-        ]);
+    $exists = DB::table('ChuyenBay')
+        ->where('MaChuyenBay', $id)
+        ->exists();
 
-        $sanBay->update($validated);
+    if (!$exists) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Khong tim thay chuyen bay.'
+        ], 404);
+    }
+
+    try {
+        $validated['GioKhoiHanh'] = date(
+            'Y-m-d H:i:s',
+            strtotime($validated['GioKhoiHanh'])
+        );
+
+        $validated['GioDen'] = date(
+            'Y-m-d H:i:s',
+            strtotime($validated['GioDen'])
+        );
+
+        DB::table('ChuyenBay')
+            ->where('MaChuyenBay', $id)
+            ->update($validated);
 
         return response()->json([
             'success' => true,
-            'message' => 'Cập nhật sân bay thành công!',
-            'data' => $sanBay->fresh()
+            'message' => 'Cap nhat chuyen bay thanh cong.'
         ]);
+
+    } catch (QueryException $e) {
+
+        Log::error('LOI CAP NHAT CHUYEN BAY', [
+            'id' => $id,
+            'message' => $e->getMessage(),
+            'payload' => $validated
+        ]);
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Khong the cap nhat chuyen bay.',
+            'debug' => config('app.debug') ? $e->getMessage() : null
+        ], 409);
     }
+}
+
 
     // DELETE: Xóa sân bay
     public function destroy($id)
