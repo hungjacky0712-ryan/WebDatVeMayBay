@@ -1,14 +1,15 @@
-
-
 <?php
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
 
+use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\SanBayController;
 use App\Http\Controllers\Api\MayBayController;
-use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\ChuyenBayController;
+
 use App\Http\Middleware\AdminOnly;
+
 
 // =====================================================
 // 1. DANG NHAP ADMIN
@@ -34,6 +35,7 @@ Route::post('/customer/login', [AuthController::class, 'customerLogin'])
 // =====================================================
 
 Route::get('/sanbay', [SanBayController::class, 'index']);
+
 Route::get('/sanbay/{sanbay}', [SanBayController::class, 'show']);
 
 
@@ -42,6 +44,7 @@ Route::get('/sanbay/{sanbay}', [SanBayController::class, 'show']);
 // =====================================================
 
 Route::get('/maybay', [MayBayController::class, 'index']);
+
 Route::get('/maybay/{id}', [MayBayController::class, 'show']);
 
 
@@ -50,52 +53,86 @@ Route::get('/maybay/{id}', [MayBayController::class, 'show']);
 // =====================================================
 
 Route::get('/hanghangkhong', function () {
+
     return response()->json([
         'success' => true,
         'data' => DB::table('HangHangKhong')
             ->orderBy('MaHang')
             ->get()
     ]);
+
 });
 
 
 // =====================================================
-// 6. CAC API YEU CAU DANG NHAP SANCTUM
+// 6. API CONG KHAI - CHUYEN BAY
+// =====================================================
+
+Route::get('/chuyenbay', [ChuyenBayController::class, 'index']);
+
+Route::get('/chuyenbay/{id}', [ChuyenBayController::class, 'show']);
+
+
+// =====================================================
+// 7. CAC API YEU CAU DANG NHAP SANCTUM
 // =====================================================
 
 Route::middleware('auth:sanctum')->group(function () {
 
     // DANG XUAT
+
     Route::post('/logout', [AuthController::class, 'logout']);
 
 
     // =================================================
-    // 7. CAC API CHI DANH CHO QUAN TRI VIEN
+    // 8. CAC API CHI DANH CHO QUAN TRI VIEN
     // =================================================
 
     Route::middleware(AdminOnly::class)->group(function () {
 
+
+        // ---------------------------------------------
         // CRUD SAN BAY
+        // ---------------------------------------------
 
         Route::post('/sanbay', [SanBayController::class, 'store']);
 
         Route::put('/sanbay/{sanbay}', [SanBayController::class, 'update']);
+
         Route::patch('/sanbay/{sanbay}', [SanBayController::class, 'update']);
 
         Route::delete('/sanbay/{sanbay}', [SanBayController::class, 'destroy']);
 
 
+        // ---------------------------------------------
         // CRUD MAY BAY
+        // ---------------------------------------------
 
         Route::post('/maybay', [MayBayController::class, 'store']);
 
         Route::put('/maybay/{id}', [MayBayController::class, 'update']);
+
         Route::patch('/maybay/{id}', [MayBayController::class, 'update']);
 
         Route::delete('/maybay/{id}', [MayBayController::class, 'destroy']);
 
 
+        // ---------------------------------------------
+        // CRUD CHUYEN BAY
+        // ---------------------------------------------
+
+        Route::post('/chuyenbay', [ChuyenBayController::class, 'store']);
+
+        Route::put('/chuyenbay/{id}', [ChuyenBayController::class, 'update']);
+
+        Route::patch('/chuyenbay/{id}', [ChuyenBayController::class, 'update']);
+
+        Route::delete('/chuyenbay/{id}', [ChuyenBayController::class, 'destroy']);
+
+
+        // ---------------------------------------------
         // KIEM TRA DATABASE
+        // ---------------------------------------------
 
         Route::get('/test-db', function () {
 
@@ -112,10 +149,13 @@ Route::middleware('auth:sanctum')->group(function () {
                 'database' => $database,
                 'total_tables' => count($tables),
             ]);
+
         });
 
 
+        // ---------------------------------------------
         // DANH SACH BANG DATABASE
+        // ---------------------------------------------
 
         Route::get('/tables', function () {
 
@@ -127,9 +167,9 @@ Route::middleware('auth:sanctum')->group(function () {
             ");
 
             return response()->json($tables);
+
         });
 
     });
 
 });
-
