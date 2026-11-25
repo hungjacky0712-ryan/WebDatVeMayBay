@@ -144,3 +144,144 @@
     grid-column: auto;
   }
 }
+
+.flight-fares {
+  grid-column: 1 / -1;
+  width: 100%;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.flight-fares-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.flight-fares-heading div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.flight-fares-heading div > strong {
+  color: #087443;
+  font-size: 22px;
+}
+
+.flight-fares-heading small,
+.fare-option-info span {
+  color: #64748b;
+  font-size: 13px;
+}
+
+.fare-options {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.fare-option {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 15px;
+  border: 1px solid #dce5ef;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.fare-option-info {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.fare-option-info strong {
+  color: #172b4d;
+  font-size: 15px;
+}
+
+.fare-option-action {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.fare-option-action > strong {
+  color: #087443;
+  font-size: 19px;
+}
+
+.fare-option-action button {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  background: #087443;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.fare-option-action button:hover {
+  background: #065c35;
+}
+
+.fare-option-action button:disabled {
+  background: #94a3b8;
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .fare-options {
+    grid-template-columns: 1fr;
+  }
+}
+
+.return-flight-info {
+  width: 100%;
+  margin: 12px 0;
+  padding: 14px 18px;
+  border: 1px solid #dce5ef;
+  border-radius: 10px;
+  background: #f7faff;
+}
+
+.return-flight-title {
+  display: block;
+  margin-bottom: 12px;
+  color: #1769aa;
+}
+
+.return-flight-times {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.return-flight-times > div {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.return-flight-times small {
+  color: #64748b;
+}
+
+.return-flight-duration {
+  flex: 1;
+  text-align: center;
+  align-items: center;
+}
+
+.return-flight-duration .flight-line {
+  width: 100%;
+  max-width: 180px;
+}

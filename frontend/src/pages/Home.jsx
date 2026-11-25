@@ -49,11 +49,17 @@ function Home() {
   });
 
   const [trip, setTrip] = useState("round");
-  const [from, setFrom] = useState("TP. Hồ Chí Minh (SGT)");
+  const [from, setFrom] = useState("TP. Hồ Chí Minh (SGN)");
   const [to, setTo] = useState("Hà Nội (HAN)");
   const [departure, setDeparture] = useState("");
   const [returnDate, setReturnDate] = useState("");
   const [passengers, setPassengers] = useState(1);
+
+  // Hạng vé Duffel
+  const [cabinClass, setCabinClass] = useState("economy");
+
+  // Khung giờ khởi hành
+  const [departureTime, setDepartureTime] = useState("any");
 
   const handleLogout = async () => {
     try {
@@ -110,6 +116,8 @@ function Home() {
         returnDate: trip === "round" ? returnDate : "",
         passengers,
         trip,
+        cabinClass,
+        departureTime,
       },
     });
   };
@@ -225,6 +233,7 @@ function Home() {
           </div>
 
           <form className="booking-form" onSubmit={handleSearch}>
+            {/* LOẠI HÀNH TRÌNH */}
             <div className="trip-options">
               <label>
                 <input
@@ -248,6 +257,7 @@ function Home() {
             </div>
 
             <div className="form-grid">
+              {/* ĐIỂM ĐI */}
               <div className="field">
                 <label>ĐIỂM KHỞI HÀNH</label>
                 <select
@@ -262,6 +272,7 @@ function Home() {
                 </select>
               </div>
 
+              {/* ĐIỂM ĐẾN */}
               <div className="field">
                 <label>ĐIỂM ĐẾN</label>
                 <select
@@ -276,6 +287,7 @@ function Home() {
                 </select>
               </div>
 
+              {/* NGÀY ĐI */}
               <div className="field">
                 <label>NGÀY ĐI</label>
                 <input
@@ -293,6 +305,7 @@ function Home() {
                 />
               </div>
 
+              {/* NGÀY VỀ */}
               {trip === "round" && (
                 <div className="field">
                   <label>NGÀY VỀ</label>
@@ -306,6 +319,7 @@ function Home() {
                 </div>
               )}
 
+              {/* HÀNH KHÁCH */}
               <div className="field">
                 <label>HÀNH KHÁCH</label>
                 <select
@@ -317,6 +331,54 @@ function Home() {
                       {number} hành khách
                     </option>
                   ))}
+                </select>
+              </div>
+
+              {/* HẠNG VÉ */}
+              <div className="field">
+                <label>HẠNG VÉ</label>
+                <select
+                  value={cabinClass}
+                  onChange={(e) => setCabinClass(e.target.value)}
+                >
+                  <option value="economy">
+                    Phổ thông (Economy)
+                  </option>
+
+                  <option value="premium_economy">
+                    Phổ thông đặc biệt (Premium Economy)
+                  </option>
+
+                  <option value="business">
+                    Thương gia (Business)
+                  </option>
+
+                  <option value="first">
+                    VIP / Hạng nhất (First)
+                  </option>
+                </select>
+              </div>
+
+              {/* KHUNG GIỜ */}
+              <div className="field">
+                <label>KHUNG GIỜ KHỞI HÀNH</label>
+                <select
+                  value={departureTime}
+                  onChange={(e) => setDepartureTime(e.target.value)}
+                >
+                  <option value="any">Tất cả khung giờ</option>
+                  <option value="early_morning">
+                    Sáng sớm (00:00 - 06:00)
+                  </option>
+                  <option value="morning">
+                    Buổi sáng (06:00 - 12:00)
+                  </option>
+                  <option value="afternoon">
+                    Buổi chiều (12:00 - 18:00)
+                  </option>
+                  <option value="evening">
+                    Buổi tối (18:00 - 24:00)
+                  </option>
                 </select>
               </div>
             </div>
@@ -404,4 +466,3 @@ function Home() {
 }
 
 export default Home;
-

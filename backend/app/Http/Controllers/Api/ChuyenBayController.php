@@ -10,11 +10,48 @@ use Illuminate\Database\QueryException;
 
 class ChuyenBayController extends Controller
 {
-    // 1. DANH SACH CHUYEN BAY
-    
+    // Lấy danh sách hạng vé và giá vé của các chuyến bay
+private function attachFares($flights)
+{
+    if ($flights->isEmpty()) {
+        return $flights;
+    }
+
+    $flightIds = $flights->pluck('MaChuyenBay')->toArray();
+
+    $fares = DB::table('GiaVeChuyenBay')
+        ->join(
+            'HangVe',
+            'GiaVeChuyenBay.MaHangVe',
+            '=',
+            'HangVe.MaHangVe'
+        )
+        ->whereIn('GiaVeChuyenBay.MaChuyenBay', $flightIds)
+        ->where('GiaVeChuyenBay.SoGheConTrong', '>', 0)
+        ->select(
+            'GiaVeChuyenBay.MaGiaVe',
+            'GiaVeChuyenBay.MaChuyenBay',
+            'GiaVeChuyenBay.MaHangVe',
+            'HangVe.TenHangVe',
+            'HangVe.HanhLyKg',
+            'HangVe.HeSoGia',
+            'GiaVeChuyenBay.GiaVe',
+            'GiaVeChuyenBay.TongSoGhe',
+            'GiaVeChuyenBay.SoGheConTrong'
+        )
+        ->orderBy('GiaVeChuyenBay.GiaVe')
+        ->get()
+        ->groupBy('MaChuyenBay');
+
+    foreach ($flights as $flight) {
+        $flight->GiaVe = $fares->get($flight->MaChuyenBay, collect())->values();
+    }
+
+    return $flights;
+}
+   // 1. DANH SÁCH CHUYẾN BAY DÀNH CHO KHÁCH HÀNG
 public function index(Request $request)
 {
-    // Kiểm tra dữ liệu tìm kiếm
     $validated = $request->validate([
         'from' => 'nullable|string|max:3',
         'to' => 'nullable|string|max:3',
@@ -57,7 +94,6 @@ public function index(Request $request)
             'SanBayDen.MaIATA as IATADen'
         );
 
-    // Lọc sân bay đi
     if (!empty($validated['from'])) {
         $query->where(
             'SanBayDi.MaIATA',
@@ -65,7 +101,6 @@ public function index(Request $request)
         );
     }
 
-    // Lọc sân bay đến
     if (!empty($validated['to'])) {
         $query->where(
             'SanBayDen.MaIATA',
@@ -73,7 +108,6 @@ public function index(Request $request)
         );
     }
 
-    // Lọc ngày khởi hành
     if (!empty($validated['departure'])) {
         $query->whereDate(
             'ChuyenBay.GioKhoiHanh',
@@ -81,30 +115,29 @@ public function index(Request $request)
         );
     }
 
-    // Chỉ hiển thị chuyến đã lên lịch hoặc đang bị trễ
     $query->whereIn('ChuyenBay.TrangThai', [
         'DaLenLich',
         'TreGio'
     ]);
 
-    // Chỉ lấy chuyến chưa khởi hành
     $query->where(
         'ChuyenBay.GioKhoiHanh',
         '>',
         now()
     );
 
-    // Lấy dữ liệu từ database
     $data = $query
         ->orderBy('ChuyenBay.GioKhoiHanh')
         ->get();
+
+    // Gắn thông tin giá vé vào từng chuyến bay
+    $data = $this->attachFares($data);
 
     return response()->json([
         'success' => true,
         'data' => $data
     ]);
 }
-
 
     // 2. CHI TIET CHUYEN BAY
     public function show($id)
@@ -198,6 +231,13 @@ public function index(Request $request)
         $validated,
         'MaChuyenBay'
     );
+    return response()->json([
+    'success' => true,
+    'message' => 'Thêm chuyến bay thành công.',
+    'data' => DB::table('ChuyenBay')
+        ->where('MaChuyenBay', $id)
+        ->first()
+], 201);
 
         } catch (QueryException $e) {
 
@@ -267,6 +307,13 @@ public function index(Request $request)
     DB::table('ChuyenBay')
         ->where('MaChuyenBay', $id)
         ->update($validated);
+        return response()->json([
+    'success' => true,
+    'message' => 'Cập nhật chuyến bay thành công.',
+    'data' => DB::table('ChuyenBay')
+        ->where('MaChuyenBay', $id)
+        ->first()
+]);
 
         } catch (QueryException $e) {
 

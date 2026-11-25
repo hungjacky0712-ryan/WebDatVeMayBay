@@ -1,3 +1,4 @@
+
 <?php
 
 use Illuminate\Support\Facades\Route;
@@ -8,6 +9,7 @@ use App\Http\Controllers\Api\SanBayController;
 use App\Http\Controllers\Api\MayBayController;
 use App\Http\Controllers\Api\ChuyenBayController;
 use App\Http\Controllers\Api\HanhKhachController;
+use App\Http\Controllers\Api\DuffelFlightController;
 
 use App\Http\Middleware\AdminOnly;
 
@@ -66,7 +68,7 @@ Route::get('/hanghangkhong', function () {
 
 
 // =====================================================
-// 6. API CONG KHAI - CHUYEN BAY
+// 6. API CONG KHAI - CHUYEN BAY DATABASE
 // =====================================================
 
 Route::get('/chuyenbay', [ChuyenBayController::class, 'index']);
@@ -75,18 +77,30 @@ Route::get('/chuyenbay/{id}', [ChuyenBayController::class, 'show']);
 
 
 // =====================================================
-// 7. CAC API YEU CAU DANG NHAP SANCTUM
+// 7. API CONG KHAI - DUFFEL FLIGHT API
+// =====================================================
+
+Route::post('/duffel/flights/search', [
+    DuffelFlightController::class,
+    'search'
+]);
+
+
+// =====================================================
+// 8. CAC API YEU CAU DANG NHAP SANCTUM
 // =====================================================
 
 Route::middleware('auth:sanctum')->group(function () {
 
+    // -------------------------------------------------
     // DANG XUAT
+    // -------------------------------------------------
 
     Route::post('/logout', [AuthController::class, 'logout']);
 
 
     // =================================================
-    // 8. CAC API CHI DANH CHO QUAN TRI VIEN
+    // 9. CAC API CHI DANH CHO QUAN TRI VIEN
     // =================================================
 
     Route::middleware(AdminOnly::class)->group(function () {
@@ -129,11 +143,20 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::patch('/chuyenbay/{id}', [ChuyenBayController::class, 'update']);
 
         Route::delete('/chuyenbay/{id}', [ChuyenBayController::class, 'destroy']);
+
+
+        // ---------------------------------------------
         // QUAN LY HANH KHACH
+        // ---------------------------------------------
+
         Route::get('/hanhkhach', [HanhKhachController::class, 'index']);
+
         Route::get('/hanhkhach/{id}', [HanhKhachController::class, 'show']);
+
         Route::post('/hanhkhach', [HanhKhachController::class, 'store']);
+
         Route::put('/hanhkhach/{id}', [HanhKhachController::class, 'update']);
+
         Route::delete('/hanhkhach/{id}', [HanhKhachController::class, 'destroy']);
 
 
