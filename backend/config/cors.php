@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     'paths' => [
         'api/*',
         'sanctum/csrf-cookie',
@@ -12,6 +11,7 @@ return [
     'allowed_origins' => [
         'http://localhost:5173',
         'http://127.0.0.1:5173',
+        'https://web-dat-ve-may-bay.vercel.app',
     ],
 
     'allowed_origins_patterns' => [],
@@ -23,5 +23,4 @@ return [
     'max_age' => 0,
 
     'supports_credentials' => false,
-
 ];
